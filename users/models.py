@@ -15,7 +15,7 @@ class User(AbstractUser):
             (SALES, SALES),
             (SUPPORT, SUPPORT)
         ],
-        max_length=10,
+        max_length=20,
         default=MANAGEMENT
     )
 
