@@ -18,3 +18,4 @@ class Client(models.Model):
         blank=True,
         limit_choices_to={"team_id": 2},
     )
+    status = models.BooleanField(default=False, verbose_name="Converted")
