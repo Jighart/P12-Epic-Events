@@ -2,13 +2,15 @@ from django.conf import settings
 from django.db import models
 from contracts.models import Contract
 
+from users.models import SUPPORT
+
 
 class Event(models.Model):
     contract = models.OneToOneField(
         to=Contract,
         on_delete=models.CASCADE,
-        limit_choices_to={"status": True},
-        related_name="event",
+        limit_choices_to={'status': True},
+        related_name='event'
     )
     name = models.CharField(max_length=100, null=True, blank=True)
     location = models.CharField(max_length=200, null=True, blank=True)
@@ -19,7 +21,7 @@ class Event(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        limit_choices_to={"team_id": 3},
+        limit_choices_to={'team': SUPPORT},
     )
     event_status = models.BooleanField(default=False, verbose_name="Completed")
     attendees = models.PositiveIntegerField()

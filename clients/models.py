@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from users.models import SALES
+
 
 class Client(models.Model):
     first_name = models.CharField(max_length=150)
@@ -14,7 +16,7 @@ class Client(models.Model):
     sales_contact = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        null=True, blank=True,
+        limit_choices_to={'team': SALES}
     )
     status = models.BooleanField(default=False, verbose_name="Converted")

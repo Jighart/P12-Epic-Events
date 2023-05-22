@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'clients',
     'contracts',
     'events',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -91,6 +93,20 @@ DATABASES = {
     }
 }
 
+
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DATE_FORMAT": "%d-%m-%Y",
+    "DATETIME_FORMAT": "%d-%m-%Y %H:%M",
+}
+
+
+AUTH_USER_MODEL = "users.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
