@@ -23,12 +23,12 @@ class User(AbstractUser):
         return f"{self.username} ({self.team})"
 
     def save(self, *args, **kwargs):
+        self.is_staff = True
+
         if self.team == MANAGEMENT:
             self.is_superuser = True
-            self.is_staff = True
         else:
             self.is_superuser = False
-            self.is_staff = False
 
         user = super(User, self)
         user.save()
