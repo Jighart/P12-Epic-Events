@@ -3,6 +3,7 @@ from django.db import models
 
 from clients.models import Client
 from users.models import SALES
+from status.models import Status
 
 
 class Contract(models.Model):
@@ -18,7 +19,12 @@ class Contract(models.Model):
         limit_choices_to={"status": True},
         related_name="contract",
     )
-    status = models.BooleanField(default=False, verbose_name="Signed")
+    status = models.ForeignKey(
+        to=Status,
+        on_delete=models.SET_NULL,
+        null=True,
+        default=1,
+    )
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     amount = models.FloatField()

@@ -40,7 +40,7 @@ class Command(BaseCommand):
             Contract.objects.create(
                 client_id=client,
                 sales_contact=Client.objects.get(id=client).sales_contact,
-                status=fake.boolean(chance_of_getting_true=70),
+                # status='fake.boolean(chance_of_getting_true=70)',
                 amount=fake.pyfloat(
                     right_digits=2, positive=True, min_value=100, max_value=99999
                 ),

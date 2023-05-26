@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 name=name,
                 location=f"{fake.street_address()}, {fake.city()}",
                 support_contact_id=support,
-                event_status=status,
+                #event_status=status,
                 attendees=randint(5, 500),
                 event_date=date,
                 notes=fake.paragraph(nb_sentences=randint(2, 6)),

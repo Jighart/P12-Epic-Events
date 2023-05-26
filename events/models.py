@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.db import models
-from contracts.models import Contract
 
+from contracts.models import Contract
 from users.models import SUPPORT
+from status.models import Status
 
 
 class Event(models.Model):
-    contract = models.OneToOneField(
+    contract = models.ForeignKey(
         to=Contract,
         on_delete=models.CASCADE,
         limit_choices_to={'status': True},
@@ -23,7 +24,12 @@ class Event(models.Model):
         blank=True,
         limit_choices_to={'team': SUPPORT},
     )
-    event_status = models.BooleanField(default=False, verbose_name="Completed")
+    event_status = models.ForeignKey(
+        to=Status,
+        on_delete=models.SET_NULL,
+        null=True,
+        default=1,
+    )
     attendees = models.PositiveIntegerField()
     event_date = models.DateTimeField()
     notes = models.TextField(null=True, blank=True)
