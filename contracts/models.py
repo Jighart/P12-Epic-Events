@@ -29,3 +29,6 @@ class Contract(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     amount = models.FloatField()
     payment_due = models.DateField()
+
+    def __str__(self):
+        return f"Contract {self.id}"

@@ -20,3 +20,6 @@ class Client(models.Model):
         limit_choices_to={'team': SALES}
     )
     status = models.BooleanField(default=False, verbose_name="Converted")
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"

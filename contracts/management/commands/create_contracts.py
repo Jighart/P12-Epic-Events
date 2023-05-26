@@ -40,11 +40,10 @@ class Command(BaseCommand):
             Contract.objects.create(
                 client_id=client,
                 sales_contact=Client.objects.get(id=client).sales_contact,
-                # status='fake.boolean(chance_of_getting_true=70)',
                 amount=fake.pyfloat(
                     right_digits=2, positive=True, min_value=100, max_value=99999
                 ),
                 payment_due=fake.date_between_dates(
-                    date_start=datetime(2022, 1, 1), date_end=datetime(2023, 12, 31)
+                    date_start=datetime(2023, 1, 1), date_end=datetime(2024, 12, 31)
                 ).strftime("%Y-%m-%d"),
             )
