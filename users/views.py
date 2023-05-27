@@ -1,3 +1,12 @@
-from django.shortcuts import render
+from rest_framework import generics, permissions
 
-# Create your views here.
+from users.serializers import UpdatePasswordSerializer
+
+
+class UpdatePassword(generics.UpdateAPIView):
+    http_method_names = ["put", "options"]
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UpdatePasswordSerializer
+
+    def get_object(self):
+        return self.request.user

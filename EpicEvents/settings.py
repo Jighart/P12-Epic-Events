@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import environ
 
 env = environ.Env()
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
     'clients',
     'contracts',
@@ -104,6 +106,11 @@ REST_FRAMEWORK = {
     ],
     "DATE_FORMAT": "%d-%m-%Y",
     "DATETIME_FORMAT": "%d-%m-%Y %H:%M",
+}
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
 }
 
 
