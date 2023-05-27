@@ -28,7 +28,7 @@ class Event(models.Model):
         to=Status,
         on_delete=models.SET_NULL,
         null=True,
-        default=1,
+        default=3,
     )
     attendees = models.PositiveIntegerField()
     event_date = models.DateTimeField()
