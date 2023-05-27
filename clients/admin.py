@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import Client
+from users.models import SALES
 
 
 @admin.register(Client)
@@ -22,7 +23,6 @@ class ClientAdmin(admin.ModelAdmin):
         ("Sales", {"fields": ("status", "sales_contact")}),
         ("Info", {"fields": ("date_created", "date_updated")}),
     )
-    readonly_fields = ("date_created", "date_updated")
     list_display = (
         "full_name",
         "company_name",
@@ -34,7 +34,26 @@ class ClientAdmin(admin.ModelAdmin):
     )
     list_filter = ("status", "sales_contact")
     search_fields = ("first_name", "last_name", "company_name", "sales_contact")
+    readonly_fields = ("date_created", "date_updated")
 
     @staticmethod
     def full_name(obj):
-        return f"{obj.last_name}, {obj.first_name}"
+        return f"{obj.first_name} {obj.last_name}"
+
+    def has_delete_permission(self, request, obj=None):
+        if obj:
+            if not ((request.user.team == SALES) and (request.user.id == obj.sales_contact)):
+                return False
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        if obj:
+            if not ((request.user.team == SALES) and (request.user.id == obj.sales_contact)):
+                return False
+        return True
+
+    def has_add_permission(self, request):
+        if not request.user.team == SALES:
+            return False
+        return True
+
