@@ -5,7 +5,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from users.models import SALES, SUPPORT, MANAGEMENT
+from users.models import SALES, SUPPORT
 from events.models import Event
 from events.permissions import EventPermissions
 from events.serializers import EventSerializer

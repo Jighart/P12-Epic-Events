@@ -49,9 +49,7 @@ class ClientDetail(generics.RetrieveUpdateDestroyAPIView):
         serializer = ClientSerializer(data=request.data, instance=client)
         if serializer.is_valid(raise_exception=True):
             if client.status is True and serializer.validated_data["status"] is False:
-                raise ValidationError(
-                    {"detail": "Cannot change status of converted client."}
-                )
+                raise ValidationError({"detail": "Cannot change status of converted client."})
             elif serializer.validated_data["status"] is True:
                 serializer.validated_data["sales_contact"] = request.user
             serializer.save()
