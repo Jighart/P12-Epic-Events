@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from events.models import Event
-from users.models import SUPPORT, MANAGEMENT
+from users.models import SALES, SUPPORT, MANAGEMENT
 
 
 @admin.register(Event)
@@ -41,7 +41,7 @@ class EventAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         try:
-            if request.user.team not in {SUPPORT, MANAGEMENT}:
+            if request.user.team not in {SALES, MANAGEMENT}:
                 return False
             return True
         except AttributeError:
