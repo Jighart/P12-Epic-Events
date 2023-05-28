@@ -1,17 +1,18 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from users.models import SALES, SUPPORT
-from .models import Client
-from .permissions import ClientPermissions
-from .serializers import ClientSerializer
+from clients.models import Client
+from clients.permissions import ClientPermissions
+from clients.serializers import ClientSerializer
 
 
-class ClientList(generics.ListCreateAPIView):
+class ClientViewset(ModelViewSet):
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated, ClientPermissions]
     filter_backends = [SearchFilter, DjangoFilterBackend]
@@ -29,20 +30,13 @@ class ClientList(generics.ListCreateAPIView):
             return prospects | own_clients
         return Client.objects.all()
 
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = ClientSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             if serializer.validated_data["status"] is True:
                 serializer.validated_data["sales_contact"] = request.user
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class ClientDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Client.objects.all()
-    http_method_names = ["get", "put", "delete", "options"]
-    permission_classes = [IsAuthenticated, ClientPermissions]
-    serializer_class = ClientSerializer
 
     def update(self, request, *args, **kwargs):
         client = self.get_object()
