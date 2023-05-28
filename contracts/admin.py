@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Contract
+from contracts.models import Contract
+from users.models import SALES
 
 
 @admin.register(Contract)
@@ -25,3 +26,29 @@ class ContractAdmin(admin.ModelAdmin):
     @staticmethod
     def contract_number(obj):
         return f"Contract #{obj.id}"
+
+    def has_module_permission(self, request):
+        return True
+
+    def has_add_permission(self, request):
+        try:
+            if not request.user.team == SALES:
+                return False
+            return True
+        except AttributeError:
+            pass
+
+    def has_view_permission(self, request, obj=None):
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        if obj:
+            if not request.user.team == SALES and not request.user.id == obj.sales_contact:
+                return False
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        if obj:
+            if not request.user.team == SALES and not request.user.id == obj.sales_contact:
+                return False
+        return True

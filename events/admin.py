@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Event
+from events.models import Event
+from users.models import SUPPORT
 
 
 @admin.register(Event)
@@ -34,3 +35,30 @@ class EventAdmin(admin.ModelAdmin):
     )
     list_filter = ("event_status", "support_contact")
     search_fields = ("name", "location", "client__last_name")
+
+    def has_module_permission(self, request):
+        return True
+
+    def has_add_permission(self, request):
+        try:
+            if not request.user.team == SUPPORT:
+                return False
+            return True
+        except AttributeError:
+            pass
+
+    def has_view_permission(self, request, obj=None):
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        if obj:
+            if not request.user.team == SUPPORT and not request.user.id == obj.support_contact:
+                return False
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        if obj:
+            if not request.user.team == SUPPORT and not request.user == obj.contract.sales_contact:
+                print(obj.contract.sales_contact)
+                return False
+        return True

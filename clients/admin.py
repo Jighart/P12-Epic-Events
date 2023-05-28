@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Client
-from users.models import SALES
+from users.models import SALES, SUPPORT
 
 
 @admin.register(Client)
@@ -40,20 +40,30 @@ class ClientAdmin(admin.ModelAdmin):
     def full_name(obj):
         return f"{obj.first_name} {obj.last_name}"
 
+    def has_module_permission(self, request):
+        return True
+
+    def has_view_permission(self, request, obj=None):
+        return True
+
     def has_delete_permission(self, request, obj=None):
         if obj:
-            if not ((request.user.team == SALES) and (request.user.id == obj.sales_contact)):
+            if not request.user.team == SALES and not request.user.id == obj.sales_contact:
                 return False
         return True
 
     def has_change_permission(self, request, obj=None):
         if obj:
-            if not ((request.user.team == SALES) and (request.user.id == obj.sales_contact)):
+            if not request.user.team == SALES and not request.user.id == obj.sales_contact:
                 return False
         return True
 
     def has_add_permission(self, request):
-        if not request.user.team == SALES:
+        try:
+            if request.user.team == SALES:
+                return True
             return False
-        return True
+        except AttributeError:
+            pass
+
 
