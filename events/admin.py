@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from events.models import Event
-from users.models import SUPPORT
+from users.models import SUPPORT, MANAGEMENT
 
 
 @admin.register(Event)
@@ -41,7 +41,7 @@ class EventAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         try:
-            if not request.user.team == SUPPORT:
+            if request.user.team not in {SUPPORT, MANAGEMENT}:
                 return False
             return True
         except AttributeError:
@@ -52,13 +52,12 @@ class EventAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         if obj:
-            if not request.user.team == SUPPORT and not request.user.id == obj.support_contact:
+            if request.user.team not in {SUPPORT, MANAGEMENT} and not request.user.id == obj.support_contact:
                 return False
         return True
 
     def has_change_permission(self, request, obj=None):
         if obj:
-            if not request.user.team == SUPPORT and not request.user == obj.contract.sales_contact:
-                print(obj.contract.sales_contact)
+            if request.user.team not in {SUPPORT, MANAGEMENT} and not request.user == obj.contract.sales_contact:
                 return False
         return True

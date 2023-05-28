@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Client
-from users.models import SALES, SUPPORT
+from users.models import SALES, MANAGEMENT
 
 
 @admin.register(Client)
@@ -48,22 +48,20 @@ class ClientAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         if obj:
-            if not request.user.team == SALES and not request.user.id == obj.sales_contact:
+            if request.user.team not in {SALES, MANAGEMENT} and not request.user.id == obj.sales_contact:
                 return False
         return True
 
     def has_change_permission(self, request, obj=None):
         if obj:
-            if not request.user.team == SALES and not request.user.id == obj.sales_contact:
+            if request.user.team not in {SALES, MANAGEMENT} and not request.user.id == obj.sales_contact:
                 return False
         return True
 
     def has_add_permission(self, request):
         try:
-            if request.user.team == SALES:
+            if request.user.team in {SALES, MANAGEMENT}:
                 return True
             return False
         except AttributeError:
             pass
-
-
