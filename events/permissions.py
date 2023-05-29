@@ -7,9 +7,9 @@ from users.models import SALES, SUPPORT, MANAGEMENT
 class EventPermissions(permissions.BasePermission):
     """
     Sales team : can CREATE new events
-                 can VIEW events of their own clients
+                 can VIEW events
                  can UPDATE events of their own clients if not finished
-    Support team : can VIEW events of their own clients
+    Support team : can VIEW events
                    can UPDATE events of their own clients if not finished
     """
 
@@ -19,8 +19,10 @@ class EventPermissions(permissions.BasePermission):
         return request.user.team in {SALES, MANAGEMENT}
 
     def has_object_permission(self, request, view, obj):
+        if request.method == 'DELETE':
+            return request.user.team == MANAGEMENT
         if request.method in permissions.SAFE_METHODS:
-            return request.user in {obj.support_contact, obj.contract.sales_contact}
+            return True
         else:
             if obj.event.status.name == 'COMPLETE':
                 raise PermissionDenied("Cannot update a finished event.")

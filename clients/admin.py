@@ -40,22 +40,18 @@ class ClientAdmin(admin.ModelAdmin):
     def full_name(obj):
         return f"{obj.first_name} {obj.last_name}"
 
+    # Permissions
+    #
+    # Sales team : can CREATE new clients
+    #              can VIEW clients
+    #              can UPDATE any prospect and their own clients
+    #              can DELETE prospects only
+    # Support team : can VIEW clients
+
     def has_module_permission(self, request):
         return True
 
     def has_view_permission(self, request, obj=None):
-        return True
-
-    def has_delete_permission(self, request, obj=None):
-        if obj:
-            if request.user.team not in {SALES, MANAGEMENT} and not request.user.id == obj.sales_contact:
-                return False
-        return True
-
-    def has_change_permission(self, request, obj=None):
-        if obj:
-            if request.user.team not in {SALES, MANAGEMENT} and not request.user.id == obj.sales_contact:
-                return False
         return True
 
     def has_add_permission(self, request):
@@ -65,3 +61,16 @@ class ClientAdmin(admin.ModelAdmin):
             return False
         except AttributeError:
             pass
+
+    def has_change_permission(self, request, obj=None):
+        if obj:
+            if (request.user == obj.sales_contact and obj.status is False) or request.user.team == MANAGEMENT:
+                return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if obj:
+            if request.user == obj.sales_contact or request.user.team == MANAGEMENT:
+                return not obj.status
+        return False
+

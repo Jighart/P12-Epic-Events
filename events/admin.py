@@ -36,28 +36,38 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ("event_status", "support_contact")
     search_fields = ("name", "location", "client__last_name")
 
+    # Permissions
+    #
+    # Sales team : can CREATE new events
+    #              can VIEW events
+    #              can UPDATE events of their own clients if not finished
+    # Support team : can VIEW events
+    #                can UPDATE events of their own clients if not finished
+
     def has_module_permission(self, request):
         return True
-
-    def has_add_permission(self, request):
-        try:
-            if request.user.team not in {SALES, MANAGEMENT}:
-                return False
-            return True
-        except AttributeError:
-            pass
 
     def has_view_permission(self, request, obj=None):
         return True
 
-    def has_delete_permission(self, request, obj=None):
-        if obj:
-            if request.user.team not in {SUPPORT, MANAGEMENT} and not request.user.id == obj.support_contact:
-                return False
-        return True
+    def has_add_permission(self, request):
+        try:
+            if request.user.team in {SALES, MANAGEMENT}:
+                return True
+            return False
+        except AttributeError:
+            pass
 
     def has_change_permission(self, request, obj=None):
         if obj:
-            if request.user.team not in {SUPPORT, MANAGEMENT} and not request.user == obj.contract.sales_contact:
-                return False
-        return True
+            if request.user.team == MANAGEMENT:
+                return True
+            elif request.user in {obj.contract.sales_contact, obj.support_contact}:
+                return not obj.event.status.name == 'COMPLETE'
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if obj:
+            if request.user.team == MANAGEMENT:
+                return True
+        return False
