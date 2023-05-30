@@ -8,15 +8,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options["verbosity"] != 0:
-            self.stdout.write(f"Creating status...")
+            self.stdout.write(f"Checking if status are present...")
         self.create_status(self)
 
     @staticmethod
     def create_status(self):
-        if Status.objects.filter(id=1):
-            self.stdout.write(f"Status already created")
-        else:
-            status_list = ('PENDING', 'SIGNED', 'CREATED', 'CANCELLED', 'POSTPONED', 'COMPLETE')
+        status_list = ('PENDING', 'SIGNED', 'CREATED', 'CANCELLED', 'POSTPONED', 'COMPLETE')
 
-            for name in status_list:
-                Status.objects.create(name=name)
+        for name in status_list:
+            Status.objects.get_or_create(name=name)
