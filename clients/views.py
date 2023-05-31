@@ -20,14 +20,6 @@ class ClientViewset(ModelViewSet):
     filterset_fields = ["status"]
 
     def get_queryset(self):
-        if self.request.user.team == SUPPORT:
-            return Client.objects.filter(
-                contract__event__support_contact=self.request.user
-            ).distinct()
-        elif self.request.user.team == SALES:
-            prospects = Client.objects.filter(status=False)
-            own_clients = Client.objects.filter(sales_contact=self.request.user)
-            return prospects | own_clients
         return Client.objects.all()
 
     def create(self, request, *args, **kwargs):

@@ -29,10 +29,6 @@ class ContractViewset(ModelViewSet):
     }
 
     def get_queryset(self):
-        if self.request.user.team == SUPPORT:
-            return Contract.objects.filter(event__support_contact=self.request.user)
-        elif self.request.user.team == SALES:
-            return Contract.objects.filter(sales_contact=self.request.user)
         return Contract.objects.all()
 
     def create(self, request, *args, **kwargs):
