@@ -15,17 +15,12 @@ class EventPermissions(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if request.user.team == SUPPORT:
-            return request.method in ["GET", "PUT"]
+            return request.method in ['GET', 'PUT']
         return request.user.team in {SALES, MANAGEMENT}
 
     def has_object_permission(self, request, view, obj):
-        if request.method == 'DELETE':
-            return request.user.team == MANAGEMENT
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in permissions.SAFE_METHODS or request.user.team == MANAGEMENT:
             return True
-        else:
-            if obj.event.status.name == 'COMPLETE':
-                raise PermissionDenied("Cannot update a finished event.")
-            if request.user.team == SUPPORT:
-                return request.user == obj.support_contact
-            return request.user == obj.contract.sales_contact or request.user.team == MANAGEMENT
+        elif obj.event.status.name == 'COMPLETE':
+            raise PermissionDenied("Cannot update a finished event.")
+        return request.user in {obj.contract.sales_contact, obj.support_contact}

@@ -51,12 +51,7 @@ class EventAdmin(admin.ModelAdmin):
         return True
 
     def has_add_permission(self, request):
-        try:
-            if request.user.team in {SALES, MANAGEMENT}:
-                return True
-            return False
-        except AttributeError:
-            pass
+        return request.user.is_authenticated and request.user.team in {SALES, MANAGEMENT}
 
     def has_change_permission(self, request, obj=None):
         if obj:
@@ -64,10 +59,8 @@ class EventAdmin(admin.ModelAdmin):
                 return True
             elif request.user in {obj.contract.sales_contact, obj.support_contact}:
                 return not obj.event.status.name == 'COMPLETE'
-        return False
+            return False
 
     def has_delete_permission(self, request, obj=None):
         if obj:
-            if request.user.team == MANAGEMENT:
-                return True
-        return False
+            return request.user.team == MANAGEMENT

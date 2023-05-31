@@ -2,7 +2,6 @@ from rest_framework import permissions
 from rest_framework.exceptions import PermissionDenied
 
 from users.models import SALES, SUPPORT, MANAGEMENT
-from contracts.models import Contract
 
 
 class ContractPermissions(permissions.BasePermission):

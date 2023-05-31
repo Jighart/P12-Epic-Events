@@ -42,21 +42,14 @@ class ContractAdmin(admin.ModelAdmin):
         return True
 
     def has_add_permission(self, request):
-        try:
-            if request.user.team in {SALES, MANAGEMENT}:
-                return True
-            return False
-        except AttributeError:
-            pass
+        return request.user.is_authenticated and request.user.team in {SALES, MANAGEMENT}
 
     def has_change_permission(self, request, obj=None):
         if obj:
-            if request.user.team == MANAGEMENT or request.user == obj.sales_contact:
-                return True
-        return False
+            return request.user.team == MANAGEMENT or request.user == obj.sales_contact
 
     def has_delete_permission(self, request, obj=None):
         if obj:
             if request.user.team == MANAGEMENT or request.user == obj.sales_contact:
                 return not obj.status.name == 'SIGNED'
-        return False
+            return False

@@ -55,22 +55,14 @@ class ClientAdmin(admin.ModelAdmin):
         return True
 
     def has_add_permission(self, request):
-        try:
-            if request.user.team in {SALES, MANAGEMENT}:
-                return True
-            return False
-        except AttributeError:
-            pass
+        return request.user.is_authenticated and request.user.team in {SALES, MANAGEMENT}
 
     def has_change_permission(self, request, obj=None):
         if obj:
-            if (request.user == obj.sales_contact and obj.status is False) or request.user.team == MANAGEMENT:
-                return True
-        return False
+            return (request.user == obj.sales_contact and obj.status is False) or request.user.team == MANAGEMENT
 
     def has_delete_permission(self, request, obj=None):
         if obj:
             if request.user == obj.sales_contact or request.user.team == MANAGEMENT:
                 return not obj.status
-        return False
-
+            return False
