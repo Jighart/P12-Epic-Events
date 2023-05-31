@@ -20,7 +20,7 @@ class User(AbstractUser):
     )
 
     def __str__(self):
-        return f"{self.username} ({self.team})"
+        return f'{self.username} ({self.team})'
 
     def save(self, *args, **kwargs):
         self.is_staff = True

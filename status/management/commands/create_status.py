@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 
-from status.models import Status
+from status.models import Status, STATUS
 
 
 class Command(BaseCommand):
@@ -13,7 +13,5 @@ class Command(BaseCommand):
 
     @staticmethod
     def create_status(self):
-        status_list = ('PENDING', 'SIGNED', 'CREATED', 'CANCELLED', 'POSTPONED', 'COMPLETE')
-
-        for name in status_list:
-            Status.objects.get_or_create(name=name)
+        for name in STATUS:
+            Status.objects.get_or_create(name=name[0])
