@@ -15,7 +15,7 @@ class Command(BaseCommand):
             "--number",
             "-n",
             dest="number",
-            default=10,
+            default=40,
             type=int,
             help="Specify the number of clients to create.",
         )

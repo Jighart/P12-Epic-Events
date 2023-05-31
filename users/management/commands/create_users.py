@@ -14,7 +14,7 @@ class Command(BaseCommand):
             "--number",
             "-n",
             dest="number",
-            default=5,
+            default=20,
             type=int,
             help="Specify the number of users to create.",
         )
@@ -32,7 +32,7 @@ class Command(BaseCommand):
             User.objects.create_user(
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
-                username=f"{fake.user_name()}{random.randint(1, 99)}",
+                username={fake.user_name()},
                 password=fake.password(length=8),
                 email=fake.ascii_safe_email(),
                 phone=fake.phone_number(),
