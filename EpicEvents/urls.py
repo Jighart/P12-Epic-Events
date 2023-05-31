@@ -10,13 +10,13 @@ from events.views import EventViewset
 
 
 client_router = routers.SimpleRouter()
-client_router.register(r"clients/?", ClientViewset, basename="clients")
+client_router.register(r'clients/?', ClientViewset, basename='clients')
 
 contract_router = routers.SimpleRouter()
-contract_router.register(r"contract/?", ContractViewset, basename='contract')
+contract_router.register(r'contract/?', ContractViewset, basename='contract')
 
 event_router = routers.SimpleRouter()
-event_router.register(r"events/?", EventViewset, basename='events')
+event_router.register(r'events/?', EventViewset, basename='events')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
