@@ -4,7 +4,7 @@ from status.models import Status
 
 
 class Command(BaseCommand):
-    help = "Create status."
+    help = "Create status if they aren't present."
 
     def handle(self, *args, **options):
         if options["verbosity"] != 0:
