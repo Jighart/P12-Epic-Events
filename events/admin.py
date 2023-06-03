@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from events.models import Event
-from users.models import SALES, SUPPORT, MANAGEMENT
+from users.models import SALES, MANAGEMENT
 
 
 @admin.register(Event)
