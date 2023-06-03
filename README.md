@@ -95,6 +95,8 @@ Run the server with ```python manage.py runserver```. The CRM is browsable via t
 
 User management is only available via the admin site and does not appear in the API.
 
+You can find details of the endpoints on the [Postman documentation](https://documenter.getpostman.com/view/26832348/2s93sW8agM).
+
 ## Admin site
 
 Tha admin site is available at http://127.0.0.1:8000/admin/. Admin site access is granted to all users.
