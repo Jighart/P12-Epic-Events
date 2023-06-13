@@ -58,7 +58,7 @@ class EventAdmin(admin.ModelAdmin):
             if request.user.team == MANAGEMENT:
                 return True
             elif request.user in {obj.contract.sales_contact, obj.support_contact}:
-                return not obj.event.status.name == 'COMPLETE'
+                return not obj.event_status.name == 'COMPLETE'
             return False
 
     def has_delete_permission(self, request, obj=None):
