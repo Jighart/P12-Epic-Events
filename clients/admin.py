@@ -59,7 +59,7 @@ class ClientAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         if obj:
-            return (request.user == obj.sales_contact and obj.status is False) or request.user.team == MANAGEMENT
+            return (request.user == obj.sales_contact or obj.status is False) or request.user.team == MANAGEMENT
 
     def has_delete_permission(self, request, obj=None):
         if obj:
