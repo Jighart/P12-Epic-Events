@@ -21,6 +21,6 @@ class EventPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS or request.user.team == MANAGEMENT:
             return True
-        elif obj.event.status.name == 'COMPLETE':
+        elif obj.event_status.name == 'COMPLETE':
             raise PermissionDenied("Cannot update a finished event.")
         return request.user in {obj.contract.sales_contact, obj.support_contact}

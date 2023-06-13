@@ -23,4 +23,4 @@ class ClientPermissions(permissions.BasePermission):
             raise PermissionDenied('Cannot delete a converted client.')
         elif request.user.team == SUPPORT:
             return request.method in permissions.SAFE_METHODS
-        return request.user == obj.sales_contact or obj.status is False or request.user.team in {SALES, MANAGEMENT}
+        return request.user == obj.sales_contact or obj.status is False or request.user.team in MANAGEMENT
